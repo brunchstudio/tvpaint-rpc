@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "tvpaint-rpc"
+version = "0.1.0"
+description = "TVPaint RPC over WebSocket server C++ plugin"
+authors = ["Brunch Studio Pipeline <dev@brunchstudio.tv>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+conan = "^2.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
