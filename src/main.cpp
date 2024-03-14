@@ -108,27 +108,25 @@ void FAR PASCAL PI_Close(PIFilter *iFilter) {
  * Handle George commands in the main thread
  */
 void processGeorgeCommands(PIFilter *iFilter) {
-  if (wsserver->george_commands.empty()) {
-    return;
+  while (!wsserver->george_commands.empty()) {
+    auto payload = wsserver->george_commands.front();
+
+    // Execute the George command and store the result
+    char george_result[2048];
+    int executionStatus =
+        TVSendCmd(iFilter, payload.command.c_str(), george_result);
+
+    if (executionStatus == NULL) { // Handle an error
+      auto error = json_rpc_error(payload.id, JSON_RPC_SERVER_ERROR,
+                                  "Error when executing George command");
+      wsserver->wsserver.send(payload.hdl, error, payload.opcode);
+    } else { // Send the result
+      auto json_response = json_rpc_result(payload.id, george_result);
+      wsserver->wsserver.send(payload.hdl, json_response, payload.opcode);
+    }
+
+    wsserver->george_commands.pop();
   }
-
-  auto payload = wsserver->george_commands.front();
-
-  // Execute the George command and store the result
-  char george_result[2048];
-  int executionStatus =
-      TVSendCmd(iFilter, payload.command.c_str(), george_result);
-
-  if (executionStatus == NULL) { // Handle an error
-    auto error = json_rpc_error(payload.id, JSON_RPC_SERVER_ERROR,
-                                "Error when executing George command");
-    wsserver->wsserver.send(payload.hdl, error, payload.opcode);
-  } else { // Send the result
-    auto json_response = json_rpc_result(payload.id, george_result);
-    wsserver->wsserver.send(payload.hdl, json_response, payload.opcode);
-  }
-
-  wsserver->george_commands.pop();
 }
 
 /**
