@@ -42,11 +42,10 @@ void replace_default_logger(const char *log_path) {
 INTPTR create_requester(PIFilter *iFilter) {
   int width = 150;
   int height = 80;
-  int text_margin = 10;
 
   // Create an empty requester to force enabling ticks
   // The requester is hidden
-  INTPTR req = TVOpenFilterReqEx(iFilter, width, height, NULL, NULL,
+  INTPTR req = TVOpenFilterReqEx(iFilter, width, height, 0, 0,
                                  PIRF_HIDDEN_REQ, FILTERREQ_NO_TBAR);
 
   TVGrabTicks(iFilter, req, PITICKS_FLAG_ON);
