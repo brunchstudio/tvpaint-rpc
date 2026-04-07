@@ -1,14 +1,26 @@
-[tool.poetry]
-name = "tvpaint-rpc"
-version = "0.1.0"
-description = "TVPaint RPC over WebSocket server C++ plugin"
-authors = ["Brunch Studio Pipeline <dev@brunchstudio.tv>"]
-readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.9"
-conan = "^2.1.0"
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tvpaint-rpc"
+dynamic = ["version"]
+description = "TVPaint RPC over WebSocket server C++ plugin"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Brunch Studio Pipeline", email = "dev@brunchstudio.tv" }
+]
+keywords = ["tvpaint", "brunch", "tvp", "george"]
+
+[project.urls]
+Repository = "https://github.com/brunchstudio/tvpaint-rpc"
+Documentation = "https://brunchstudio.github.io/pytvpaint/"
+
+requires-python = ">=3.9"
+dependencies = [
+    "conan>=2.1.0",
+]
+
+[tool.hatch.version]
+source = "vcs"

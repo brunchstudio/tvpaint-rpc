@@ -1,3 +1,4 @@
+.vs
 .venv
 .vscode
 TVPaint_SDK
@@ -6,4 +7,6 @@ CMakeUserPresets.json
 tvpaint-ws-server.exp
 tvpaint-ws-server.lib
 
+_build
 build
+out

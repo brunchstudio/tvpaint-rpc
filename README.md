@@ -10,17 +10,18 @@ It's used as a communication layer for [Pytvpaint](https://github.com/brunchstud
 
 To install the build dependencies, we use [Conan](https://conan.io/) which is a C/C++ package manager.
 
-To install it, use the virtualenv provided by [Poetry](https://python-poetry.org/):
+To install it, use [Hatch](https://hatch.pypa.io/). 
+
+If you do not have Hatch, you can install it via Python pip :
 
 ```shell
-$ poetry install --no-root # Installs Conan
-$ poetry shell # Enter a new venv shell
+❯ pip install hatch
 ```
 
 Then configure your Conan compilation profile:
 
 ```shell
-(venv) $ conan profile detect
+$ hatch run conan profile detect
 ```
 
 To compile the project with MSVC, an example configuration would be:
@@ -43,7 +44,7 @@ os=Windows
 To check if your profile is correct, use:
 
 ```shell
-(venv) $ conan profile show
+$ hatch run conan profile show
 ```
 
 ## Install dependencies
@@ -51,10 +52,10 @@ To check if your profile is correct, use:
 Install the dependencies specified in [`conanfile.txt`](./conanfile.txt):
 
 ```shell
-(venv) $ conan install . --output-folder=build --build=missing
+$ hatch run conan install . --output-folder=build --build=missing
 ```
 
-The above command generates CMake build files that helps finding those libraries.
+The above command generates CMake build files that helps to find those libraries.
 
 ## Build
 
@@ -87,7 +88,7 @@ To install it, copy the DLL into your `plugins` folder (depending on your TVPain
 
 The WebSocket server is launched at TVPaint's startup.
 
-By default it listens on the port `3000` but you can set the `TVP_RPC_WS_PORT` environment variable to set another port.
+By default, the server listens on the port `3000` but you can set the `PYTVPAINT_WS_PORT` environment variable to set another port.
 
 The protocol used is [JSON RPC](https://www.jsonrpc.org/specification). It allows us to send a request that contains a method and some params to execute.
 
@@ -101,12 +102,12 @@ For example:
 <-- {'error': {'code': -32601, 'message': 'Method not found'}, 'id': 0, 'jsonrpc': '2.0'}
 ```
 
-You can use the `TVP_RPC_LOG_PATH` environment variable to set the log file directory (named `.tvpaint-rpc.log`). By default they are not logged to a file.
+You can use the `PYTVPAINT_LOG_LEVEL` environment variable to set the log file directory. By default, the server does not log to a file.
 
 ## Limitations
 
 - This plugin is Windows only, the CMake configuration would need to be tested and updated
-- Due to UTF-8 handling when receiving results from TVPaint's George commands, some characters outside of UTF-16 range are not recognized (example: emoji characters in a layer name)
+- Due to UTF-8 handling when receiving results from TVPaint's George commands, some characters outside UTF-16 range are not recognized (example: emoji characters in a layer name)
 
 ## Libraries
 
