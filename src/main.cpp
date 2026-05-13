@@ -12,8 +12,7 @@
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "spdlog/spdlog.h"
 
-#include "plugdllx.h"
-#include "plugx.h"
+#include "TVPaintAnimationSDK/TVPaintSDK.h"
 
 #include "./rpc.hpp"
 #include "./server.hpp"
@@ -39,16 +38,18 @@ void replace_default_logger(const char *log_path) {
   spdlog::set_default_logger(logger);
 }
 
-INTPTR create_requester(PIFilter *iFilter) {
+INTPTR create_requester(PIPlugin *iFilter) {
   int width = 150;
   int height = 80;
+  int text_margin = 10;
 
   // Create an empty requester to force enabling ticks
   // The requester is hidden
-  INTPTR req = TVOpenFilterReqEx(iFilter, width, height, 0, 0,
-                                 PIRF_HIDDEN_REQ, FILTERREQ_NO_TBAR);
+  INTPTR req = TVOpenFilterReqEx(iFilter, width, height, NULL, NULL,
+                                 bPIRequesterFlags_Hidden,
+                                 bPIFilterFlags_NoTopBar);
 
-  TVGrabTicks(iFilter, req, PITICKS_FLAG_ON);
+  TVGrabTicks(iFilter, req, kPITicks_On);
 
   return req;
 }
@@ -56,7 +57,7 @@ INTPTR create_requester(PIFilter *iFilter) {
 /**
  * Called first during the TVPaint plugin initialization
  */
-int FAR PASCAL PI_Open(PIFilter *iFilter) {
+int STDCALL PI_Open(PIPlugin *iFilter) {
   // Use log path env variable to configure the log location
   const char *log_path = std::getenv("TVP_RPC_LOG_PATH");
 
@@ -95,7 +96,7 @@ int FAR PASCAL PI_Open(PIFilter *iFilter) {
 /**
  * Called on plugin shutdown, do the necessary cleanup here
  */
-void FAR PASCAL PI_Close(PIFilter *iFilter) {
+void STDCALL PI_Close(PIPlugin *iFilter) {
   // Shutting down the server
   if (wsserver) {
     wsserver->stop();
@@ -106,7 +107,7 @@ void FAR PASCAL PI_Close(PIFilter *iFilter) {
 /**
  * Handle George commands in the main thread
  */
-void processGeorgeCommands(PIFilter *iFilter) {
+void processGeorgeCommands(PIPlugin *iFilter) {
   while (!wsserver->george_commands.empty()) {
     auto payload = wsserver->george_commands.front();
 
@@ -131,13 +132,13 @@ void processGeorgeCommands(PIFilter *iFilter) {
 /**
  * We have something to process
  */
-int FAR PASCAL PI_Msg(PIFilter *iFilter, INTPTR iEvent, INTPTR iReq,
-                      INTPTR *iArgs) {
+int STDCALL PI_Msg(PIPlugin *iFilter, INTPTR iEvent, INTPTR iReq,
+                   INTPTR *iArgs) {
   switch (iEvent) {
-  case PICBREQ_TICKS: // Called every 20 milliseconds at each timer ticks
+  case kPIEvents_Ticks: // Called every 20 milliseconds at each timer ticks
     processGeorgeCommands(iFilter);
     break;
-  case PICBREQ_CLOSE:
+  case kPIEvents_WindowClose:
     // The requester is closed
     req = 0;
     break;
@@ -152,14 +153,14 @@ int FAR PASCAL PI_Msg(PIFilter *iFilter, INTPTR iEvent, INTPTR iReq,
 /**
  * Initializes the settings of the parameters.
  */
-int FAR PASCAL PI_Parameters(PIFilter *iFilter, char *iArg) { return 1; }
+int STDCALL PI_Parameters(PIPlugin *iFilter, const char *iArg) { return 1; }
 
-void FAR PASCAL PI_About(PIFilter *iFilter) {}
+void STDCALL PI_About(PIPlugin *iFilter) {}
 
-int FAR PASCAL PI_Start(PIFilter *iFilter, double pos, double size) {
+int STDCALL PI_Start(PIPlugin *iFilter, double pos, double size) {
   return 1;
 }
 
-int FAR PASCAL PI_Work(PIFilter *iFilter) { return 1; }
+int STDCALL PI_Work(PIPlugin *iFilter) { return 1; }
 
-void FAR PASCAL PI_Finish(PIFilter *iFilter) {}
+void STDCALL PI_Finish(PIPlugin *iFilter) {}

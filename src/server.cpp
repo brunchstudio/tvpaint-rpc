@@ -7,7 +7,7 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 
-#include "plugdllx.h"
+#include "TVPaintAnimationSDK/TVPaintSDK.h"
 
 #include "./rpc.hpp"
 #include "./server.hpp"
@@ -16,7 +16,7 @@ using json = nlohmann::json;
 using namespace std::placeholders;
 using websocketpp::connection_hdl;
 
-WSServer::WSServer(PIFilter *iFilter) {
+WSServer::WSServer(PIPlugin *iFilter) {
   this->iFilter = iFilter;
 
   // Disable websocket logging
