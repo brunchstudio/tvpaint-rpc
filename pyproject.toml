@@ -12,12 +12,15 @@ authors = [
     { name = "Brunch Studio Pipeline", email = "dev@brunchstudio.tv" }
 ]
 keywords = ["tvpaint", "brunch", "tvp", "george"]
+requires-python = ">=3.9"
 
 [project.urls]
 Repository = "https://github.com/brunchstudio/tvpaint-rpc"
 Documentation = "https://brunchstudio.github.io/pytvpaint/"
 
-requires-python = ">=3.9"
+[tool.hatch.envs.default]
+installer = "uv"
+skip-install = true
 dependencies = [
     "conan>=2.1.0",
 ]
