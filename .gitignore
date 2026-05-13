@@ -2,6 +2,7 @@
 .venv
 .vscode
 TVPaint_SDK
+TVPaint_SDK_12
 CMakeUserPresets.json
 
 tvpaint-ws-server.exp

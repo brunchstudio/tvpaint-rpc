@@ -7,7 +7,7 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 
-#include "plugdllx.h"
+#include "TVPaintAnimationSDK/TVPaintSDK.h"
 
 #include "./queue.hpp"
 
@@ -32,7 +32,7 @@ private:
   server_thread run_thread;
 
   /* TVPaint plugin instance pointer */
-  PIFilter *iFilter;
+  PIPlugin *iFilter;
 
   void on_open(connection_hdl hdl);
   void on_message(server *s, connection_hdl hdl, server::message_ptr msg);
@@ -44,7 +44,7 @@ public:
   /* Queue storing george commands to process */
   ThreadSafeQueue<GeorgeCommand> george_commands;
 
-  WSServer(PIFilter *iFilter);
+  WSServer(PIPlugin *iFilter);
 
   void run(uint16_t port);
   void stop();
