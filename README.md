@@ -72,13 +72,13 @@ $ cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE="conan_toolchain.cm
 
 Build the project in release mode:
 
-```
+```shell
 $ cmake --build . --config Release
 ```
 
 ## Install
 
-You can find the generated `.dll` file under `./build/Release/tvpaint-ws-server.dll` after compilation.
+You can find the generated `.dll` file under `./build/Release/tvpaint-rpc.dll` after compilation.
 
 To install it, copy the DLL into your `plugins` folder (depending on your TVPaint version):
 
@@ -134,4 +134,4 @@ Please make sure to update tests as appropriate.
 
 <hr>
 
-Made with ❤️ at [BRUNCH Studio](https://brunchstudio.tv/) 🥐🍳
+Made with ❤️ at [BRUNCH Studio](https://brunchstudio.tv/)
