@@ -23,7 +23,7 @@
 WSServer *wsserver;
 
 // Global requester pointer
-DWORD req;
+INTPTR req;
 
 /**
  * Replaces the default logger and log to a file
@@ -39,15 +39,14 @@ void replace_default_logger(const char *log_path) {
   spdlog::set_default_logger(logger);
 }
 
-DWORD create_requester(PIFilter *iFilter) {
+INTPTR create_requester(PIFilter *iFilter) {
   int width = 150;
   int height = 80;
-  int text_margin = 10;
 
   // Create an empty requester to force enabling ticks
   // The requester is hidden
-  DWORD req = TVOpenFilterReqEx(iFilter, width, height, NULL, NULL,
-                                PIRF_HIDDEN_REQ, FILTERREQ_NO_TBAR);
+  INTPTR req = TVOpenFilterReqEx(iFilter, width, height, 0, 0,
+                                 PIRF_HIDDEN_REQ, FILTERREQ_NO_TBAR);
 
   TVGrabTicks(iFilter, req, PITICKS_FLAG_ON);
 
@@ -58,7 +57,7 @@ DWORD create_requester(PIFilter *iFilter) {
  * Called first during the TVPaint plugin initialization
  */
 int FAR PASCAL PI_Open(PIFilter *iFilter) {
-  // TODO: Use log path env variable to configure the log location
+  // Use log path env variable to configure the log location
   const char *log_path = std::getenv("TVP_RPC_LOG_PATH");
 
   if (log_path) {
