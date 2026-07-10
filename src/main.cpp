@@ -51,6 +51,11 @@ INTPTR create_requester(PIPlugin *iFilter) {
 
   TVGrabTicks(iFilter, req, kPITicks_On);
 
+  // The bPIRequesterFlags_Hidden flag no longer hides the window on its own in
+  // TVPaint 12's new GUI, so hide it explicitly (0 = Hide). The requester still
+  // exists and keeps receiving ticks to process WebSocket messages.
+  TVDisplayReq(iFilter, req, 0);
+
   return req;
 }
 
