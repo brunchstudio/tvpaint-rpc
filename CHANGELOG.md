@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0] - 2026-07-10
+
+## Migration to TVPaint 12.1
+
+* Updated the code to build against the TVPaint 12.1 SDK.
+* Replaced all deprecated SDK symbols with their current equivalents.
+* Fixed the plugin showing up as an empty panel by hiding the requester window explicitly with `TVDisplayReq` (the `bPIRequesterFlags_Hidden` flag no longer hides it under TVPaint 12's new GUI).
+
+**How to install :**
+Just unzip the file in your tvpaint installation folder `$TVP_INSTALL_FOLDER/Resources/plugins/`.
+
+---
+
 ## [1.2.0b] - 2026-05-13
 
 ## This is a beta release for the new TVPaint 12.1.0 version and new SDK. Though the plugin is working properley, this has not been thoroughly tested and we do not currently recommend using this in production for now.
